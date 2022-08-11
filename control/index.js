@@ -115,4 +115,41 @@ document.querySelector('#btnUpdate').onclick = function () {
         console.log(err)
     })
 }
+document.querySelector('#btnSearch').onclick = function () {
+    var modal = document.querySelector('#modal');
+    modal.style.display = 'flex';
+    var proSearch = document.querySelector('#productSearch').value;
+    var html ='';
+    var promise = axios ({
+        url: 'http://svcy.myclass.vn/api/Product/SearchByName?name=' + proSearch,
+        method: 'GET'
+    })
+    promise.then(function(result){
+        var inforItem = result.data;
+        console.log(inforItem[0])
+        if (inforItem[0].name == proSearch) {
+            html = `
+            <tr>
+                <td>${inforItem[0].id}</td>
+                <td><img src="${inforItem[0].img}" alt="" style="width:50px"></td>
+                <td>${inforItem[0].name}</td>
+                <td>${inforItem[0].price}</td>
+                <td>${inforItem[0].description}</td>
+                <td>${inforItem[0].type}</td>
+            </tr>
+        `;
+        }
+        if (inforItem[0].name != proSearch) {
+            html = 'không tìm thấy'
+        }
+        document.querySelector('#tbProduct2').innerHTML = html;
+    })
+    promise.catch(function(err) {
+
+    })
+}
+
+document.querySelector('#btnClose').onclick = function(){
+    document.querySelector('#modal').style.display = 'none';
+}
 
